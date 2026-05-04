@@ -74,14 +74,6 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
     }
   }
 
-  const changeLabel = data?.change
-    ? (data.change > 0 ? `+${data.change}¢` : `${data.change}¢`)
-    : null;
-
-  const changeColor = data?.change
-    ? (data.change > 0 ? 'text-red-500' : 'text-green-600')
-    : '';
-
   return (
     <>
       <Card
@@ -123,9 +115,6 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
               <p className="text-sm text-gray-500 mb-1">per litre</p>
             )}
           </div>
-          {changeLabel && (
-            <p className={`text-sm font-medium ${changeColor}`}>{changeLabel}</p>
-          )}
           <div className="space-y-0.5">
             <p className="text-xs text-gray-400">
               {config.priceThreshold != null ? `Alert ≤ ${formatPrice(config.priceThreshold)}` : 'Alert every check'} · {formatInterval(config.intervalMinutes, config.scheduledTime)}
