@@ -99,7 +99,7 @@ export async function fetchGasPrices(): Promise<GasPriceData> {
   logEvent({
     level: 'info',
     event: 'gasTracker.fetched',
-    meta: { price: result.price, change: result.change, direction: result.direction, headlineChange: result.headlineChange },
+    meta: { price: result.price, direction: result.direction, headlineChange: result.headlineChange },
   });
 
   return result;
