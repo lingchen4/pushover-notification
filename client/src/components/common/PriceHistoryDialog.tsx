@@ -11,44 +11,61 @@ interface PriceHistoryDialogProps {
   cardType: string;
 }
 
-function Sparkline({ rows }: { readonly rows: PriceHistoryRow[] }) {
+function Sparkline({ rows, formatValue }: { readonly rows: PriceHistoryRow[]; readonly formatValue: (v: number) => string }) {
   if (rows.length < 2) return null;
 
-  const values = [...rows].reverse().map((r) => r.value);
+  const reversed = [...rows].reverse();
+  const values = reversed.map((r) => r.value);
+  const timestamps = reversed.map((r) => r.timestamp);
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range = max - min || 1;
 
   const W = 400;
-  const H = 80;
-  const padX = 4;
-  const padY = 4;
-  const points = values.map((v, i) => {
-    const x = padX + (i / (values.length - 1)) * (W - padX * 2);
-    const y = padY + ((max - v) / range) * (H - padY * 2);
-    return `${x},${y}`;
-  });
-  const polyline = points.join(' ');
+  const H = 72;
+  const padX = 2;
+  const padY = 6;
 
-  // Filled area path
-  const first = points[0].split(',');
-  const last = points.at(-1)?.split(',');
-  const area = last
-    ? `M${first[0]},${H} L${polyline.replaceAll(/(\d+\.?\d*),(\d+\.?\d*)/g, 'L$1,$2').slice(1)} L${last[0]},${H} Z`
-    : '';
+  const pts = values.map((v, i) => ({
+    x: padX + (i / (values.length - 1)) * (W - padX * 2),
+    y: padY + ((max - v) / range) * (H - padY * 2),
+  }));
+
+  const linePath = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  const lastPt = pts.at(-1);
+  const areaPath = lastPt ? `${linePath} L${lastPt.x.toFixed(1)},${H} L${pts[0].x.toFixed(1)},${H} Z` : '';
+
+  const fmtDate = (ts: string) => new Date(ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 
   return (
-    <div className="flex items-stretch gap-2">
-      {/* Y-axis labels */}
-      <div className="flex flex-col justify-between text-right shrink-0 py-1">
-        <span className="text-[11px] font-medium text-gray-500 leading-none">{max.toFixed(1)}</span>
-        <span className="text-[11px] font-medium text-gray-500 leading-none">{min.toFixed(1)}</span>
+    <div className="bg-gray-50 rounded-lg px-3 pt-3 pb-2">
+      <div className="flex items-stretch gap-3">
+        {/* Y-axis */}
+        <div className="flex flex-col justify-between shrink-0 text-right pb-5">
+          <span className="text-[10px] text-gray-400 leading-none">{formatValue(max)}</span>
+          <span className="text-[10px] text-gray-400 leading-none">{formatValue(min)}</span>
+        </div>
+        {/* Chart + x-axis */}
+        <div className="flex flex-col flex-1 min-w-0">
+          <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-16" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgb(99,102,241)" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="rgb(99,102,241)" stopOpacity="0.01" />
+              </linearGradient>
+            </defs>
+            {/* Baseline */}
+            <line x1={padX} y1={H - padY + 2} x2={W - padX} y2={H - padY + 2} stroke="rgb(229,231,235)" strokeWidth="1" />
+            <path d={areaPath} fill="url(#sparkGrad)" />
+            <path d={linePath} fill="none" stroke="rgb(99,102,241)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          {/* X-axis */}
+          <div className="flex justify-between mt-1">
+            <span className="text-[10px] text-gray-400">{fmtDate(timestamps[0])}</span>
+            <span className="text-[10px] text-gray-400">{fmtDate(timestamps.at(-1) ?? '')}</span>
+          </div>
+        </div>
       </div>
-      {/* Chart */}
-      <svg viewBox={`0 0 ${W} ${H}`} className="flex-1 h-20" preserveAspectRatio="none">
-        <path d={area} fill="rgba(99,102,241,0.1)" />
-        <polyline points={polyline} fill="none" stroke="rgb(99,102,241)" strokeWidth="1.5" />
-      </svg>
     </div>
   );
 }
@@ -128,7 +145,7 @@ export function PriceHistoryDialog({ open, onClose, cardId, cardTitle, cardType 
         {/* Chart */}
         {rows.length > 1 && (
           <div className="px-4 sm:px-5 pt-4 pb-2">
-            <Sparkline rows={rows} />
+            <Sparkline rows={rows} formatValue={formatValue} />
           </div>
         )}
 
