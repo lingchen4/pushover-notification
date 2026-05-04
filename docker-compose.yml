@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    container_name: pushover-dashboard
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      # Persist the SQLite database across container restarts
+      - ./data:/app/server/data
+    env_file:
+      - ./server/.env
+    environment:
+      - NODE_ENV=production

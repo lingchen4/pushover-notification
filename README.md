@@ -69,6 +69,33 @@ npm run build
 
 Outputs built client to `client/dist/` and compiled server to `server/dist/`.
 
+## Docker
+
+### Quick start
+
+```bash
+cp server/.env.example server/.env
+# edit server/.env with your Pushover keys
+
+docker compose up -d
+```
+
+The app will be available at http://localhost:3001 (Express serves both the API and the React client).
+
+The SQLite database is persisted in `./data/` on the host.
+
+### Build & run manually
+
+```bash
+docker build -t pushover-dashboard .
+docker run -d \
+  -p 3001:3001 \
+  -v $(pwd)/data:/app/server/data \
+  --env-file server/.env \
+  -e NODE_ENV=production \
+  pushover-dashboard
+```
+
 ## Project Structure
 
 ```
