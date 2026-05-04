@@ -12,3 +12,4 @@ services:
       - ./server/.env
     environment:
       - NODE_ENV=production
+      - TZ=America/Toronto

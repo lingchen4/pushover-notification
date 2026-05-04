@@ -92,7 +92,7 @@ export function startJob(cardId: string): void {
       runGasTrackerJob(cardId).catch((err) =>
         logEvent({ level: 'error', event: 'gasTracker.jobFailed', cardId, meta: { error: String(err) } }),
       );
-    });
+    }, { timezone: process.env['TZ'] });
     jobs.set(cardId, task);
     logEvent({ level: 'info', event: 'scheduler.jobStarted', cardId, cardType: card.type, meta: { expression } });
   }
@@ -104,7 +104,7 @@ export function startJob(cardId: string): void {
       runAmazonPriceJob(cardId).catch((err) =>
         logEvent({ level: 'error', event: 'amazonPrice.jobFailed', cardId, meta: { error: String(err) } }),
       );
-    });
+    }, { timezone: process.env['TZ'] });
     jobs.set(cardId, task);
     logEvent({ level: 'info', event: 'scheduler.jobStarted', cardId, cardType: card.type, meta: { expression } });
   }
