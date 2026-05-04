@@ -15,6 +15,7 @@ export interface GasPriceData {
   /** Full forecast block text (En-Pro prediction) */
   forecastBlock: string | undefined;
   fetchedAt: string;
+  sourceUrl: string;
 }
 
 const GAS_URL = 'https://toronto.citynews.ca/toronto-gta-gas-prices/';
@@ -45,6 +46,7 @@ export async function fetchGasPrices(): Promise<GasPriceData> {
     direction: '=',
     forecastBlock: undefined,
     fetchedAt: new Date().toISOString(),
+    sourceUrl: GAS_URL,
   };
 
   // --- Forecast block (upcoming price move) ---

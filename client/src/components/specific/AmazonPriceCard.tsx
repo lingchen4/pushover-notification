@@ -112,7 +112,20 @@ export function AmazonPriceCard({ card }: AmazonPriceCardProps) {
             </div>
           </div>
           {data?.title && (
-            <p className="text-xs text-gray-600 truncate" title={data.title}>{data.title}</p>
+            <a
+              href={config.productUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-gray-600 truncate hover:text-indigo-500 transition-colors group max-w-full"
+              title={data.title}
+            >
+              <span className="truncate">{data.title}</span>
+              <svg className="h-3 w-3 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </a>
           )}
           <div className="flex items-end gap-3">
             <p className="text-2xl font-bold text-gray-900">{formatDollar(data?.price)}</p>

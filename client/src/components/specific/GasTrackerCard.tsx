@@ -99,7 +99,19 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
       >
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <p className="text-xs text-gray-400">Toronto/GTA Average</p>
+            <a
+              href={data?.sourceUrl ?? 'https://toronto.citynews.ca/toronto-gta-gas-prices/'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-indigo-500 transition-colors group"
+            >
+              Toronto/GTA Average
+              <svg className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </a>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setHistoryOpen(true)}
