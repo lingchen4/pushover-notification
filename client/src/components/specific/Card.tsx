@@ -46,7 +46,7 @@ export function Card({
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              title={notificationsEnabled ? 'Notifications on' : 'Notifications off'}
+              aria-label={notificationsEnabled ? 'Notifications on' : 'Notifications off'}
               className={`shrink-0 h-4 w-4 ${notificationsEnabled ? 'text-indigo-500' : 'text-gray-300'}`}
             >
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />

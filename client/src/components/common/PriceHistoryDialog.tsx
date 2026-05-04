@@ -33,7 +33,9 @@ function Sparkline({ rows }: { readonly rows: PriceHistoryRow[] }) {
   // Filled area path
   const first = points[0].split(',');
   const last = points.at(-1)?.split(',');
-  const area = `M${first[0]},${H} L${polyline.replaceAll(/(\d+\.?\d*),(\d+\.?\d*)/g, 'L$1,$2').slice(1)} L${last[0]},${H} Z`;
+  const area = last
+    ? `M${first[0]},${H} L${polyline.replaceAll(/(\d+\.?\d*),(\d+\.?\d*)/g, 'L$1,$2').slice(1)} L${last[0]},${H} Z`
+    : '';
 
   return (
     <div className="flex items-stretch gap-2">
