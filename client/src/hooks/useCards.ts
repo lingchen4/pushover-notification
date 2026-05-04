@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { CardContext } from '../context/CardContext';
-import type { CardContextValue } from '../context/CardContext';
+import { CardContext } from '../context/cardContextDef';
+import type { CardContextValue } from '../context/cardContextDef';
 
 export function useCards(): CardContextValue {
   const ctx = useContext(CardContext);

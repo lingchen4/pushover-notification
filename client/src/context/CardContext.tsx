@@ -1,12 +1,8 @@
-import { createContext, useReducer, useEffect, type ReactNode } from 'react';
+import { useReducer, useEffect, type ReactNode } from 'react';
 import { cardService } from '../services/cardService';
 import toast from 'react-hot-toast';
-import type { Card, CreateCardDto, UpdateCardDto } from '../types/card';
-
-interface CardState {
-  cards: Card[];
-  loading: boolean;
-}
+import type { Card, UpdateCardDto, CreateCardDto } from '../types/card';
+import { CardContext } from './cardContextDef';
 
 type CardAction =
   | { type: 'SET_CARDS'; payload: Card[] }
@@ -14,6 +10,11 @@ type CardAction =
   | { type: 'UPDATE_CARD'; payload: Card }
   | { type: 'REMOVE_CARD'; payload: string }
   | { type: 'SET_LOADING'; payload: boolean };
+
+interface CardState {
+  cards: Card[];
+  loading: boolean;
+}
 
 function cardReducer(state: CardState, action: CardAction): CardState {
   switch (action.type) {
@@ -32,17 +33,6 @@ function cardReducer(state: CardState, action: CardAction): CardState {
       return { ...state, loading: action.payload };
   }
 }
-
-export interface CardContextValue extends CardState {
-  addCard: (dto: CreateCardDto) => Promise<void>;
-  updateCard: (id: string, dto: UpdateCardDto) => Promise<void>;
-  refreshCard: (card: Card) => void;
-  deleteCard: (id: string) => Promise<void>;
-  toggleCard: (id: string) => Promise<void>;
-  toggleNotifications: (id: string) => Promise<void>;
-}
-
-export const CardContext = createContext<CardContextValue | undefined>(undefined);
 
 export function CardProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cardReducer, { cards: [], loading: true });
