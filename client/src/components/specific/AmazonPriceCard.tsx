@@ -79,7 +79,7 @@ export function AmazonPriceCard({ card }: AmazonPriceCardProps) {
   })();
 
   return (
-    <>
+    <div className="w-full">
       <Card
         title={card.title}
         enabled={card.enabled}
@@ -192,6 +192,6 @@ export function AmazonPriceCard({ card }: AmazonPriceCardProps) {
         cardTitle={card.title}
         cardType={card.type}
       />
-    </>
+    </div>
   );
 }

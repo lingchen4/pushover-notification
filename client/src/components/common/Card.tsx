@@ -24,7 +24,7 @@ export function Card({
   children,
 }: CardShellProps) {
   return (
-    <article className="relative flex flex-col min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+    <article className="relative flex flex-col h-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
       <button
         onClick={onDelete}
         aria-label="Delete card"

@@ -45,10 +45,10 @@ export function Dashboard() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {cards.map((card) => {
               if (card.type === CardType.GAS_TRACKER) {
-                return <div key={card.id} className="min-w-0"><GasTrackerCard card={card} /></div>;
+                return <div key={card.id} className="min-w-0 flex"><GasTrackerCard card={card} /></div>;
               }
               if (card.type === CardType.AMAZON_PRICE) {
-                return <div key={card.id} className="min-w-0"><AmazonPriceCard card={card} /></div>;
+                return <div key={card.id} className="min-w-0 flex"><AmazonPriceCard card={card} /></div>;
               }
               return null;
             })}

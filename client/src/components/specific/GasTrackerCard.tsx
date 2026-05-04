@@ -87,7 +87,7 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
     : '';
 
   return (
-    <>
+    <div className="w-full">
       <Card
         title={card.title}
         enabled={card.enabled}
@@ -195,6 +195,6 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
         cardTitle={card.title}
         cardType={card.type}
       />
-    </>
+    </div>
   );
 }
