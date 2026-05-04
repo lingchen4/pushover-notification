@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { cardService } from '../../services/cardService';
 import type { PriceHistoryRow } from '../../services/cardService';
 import { CardType } from '../../types/card';
+import { Modal } from './Modal';
 
 interface PriceHistoryDialogProps {
   open: boolean;
@@ -98,102 +99,70 @@ export function PriceHistoryDialog({ open, onClose, cardId, cardTitle, cardType 
       .finally(() => setLoading(false));
   }, [open, cardId, limit]);
 
-  if (!open) return null;
-
   return (
-    <>
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 z-50 bg-black/40"
-        aria-hidden="true"
-        onClick={onClose}
-      />
-      {/* Dialog */}
-      <dialog
-        open
-        aria-label={`${cardTitle} price history`}
-        className="fixed z-50 inset-0 m-auto bg-white rounded-xl shadow-2xl w-full max-w-lg lg:max-w-2xl flex flex-col max-h-[85vh] p-0 border-0"
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-b border-gray-100 gap-3">
-          <div className="min-w-0">
-            <h2 className="text-base font-semibold text-gray-900 truncate">{cardTitle}</h2>
-            <p className="text-xs text-gray-400">Price history</p>
-          </div>
-          <div className="flex shrink-0 items-center gap-3">
-            <select
-              value={limit}
-              onChange={(e) => setLimit(Number(e.target.value))}
-              className="text-xs border border-gray-200 rounded-md px-2 py-1 text-gray-600"
-            >
-              {LIMIT_OPTIONS.map((n) => (
-                <option key={n} value={n}>Last {n}</option>
-              ))}
-            </select>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
-              aria-label="Close"
-            >
-              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
+    <Modal open={open} onClose={onClose} title={`${cardTitle} — Price history`}>
+      {/* Limit selector */}
+      <div className="flex justify-end mb-3">
+        <select
+          value={limit}
+          onChange={(e) => setLimit(Number(e.target.value))}
+          className="text-xs border border-gray-200 rounded-md px-2 py-1 text-gray-600"
+        >
+          {LIMIT_OPTIONS.map((n) => (
+            <option key={n} value={n}>Last {n}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Chart */}
+      {rows.length > 1 && (
+        <div className="mb-4">
+          <Sparkline rows={rows} formatValue={formatValue} />
         </div>
+      )}
 
-        {/* Chart */}
-        {rows.length > 1 && (
-          <div className="px-4 sm:px-5 pt-4 pb-2">
-            <Sparkline rows={rows} formatValue={formatValue} />
-          </div>
-        )}
-
-        {/* Table */}
-        <div className="overflow-y-auto flex-1 px-4 sm:px-5 pb-4">
-          {loading ? (
-            <p className="text-sm text-gray-400 py-8 text-center">Loading…</p>
-          ) : null}
-          {!loading && rows.length === 0 ? (
-            <p className="text-sm text-gray-400 py-8 text-center">No history yet.</p>
-          ) : null}
-          {!loading && rows.length > 0 ? (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-xs text-gray-400 border-b border-gray-100">
-                  <th className="pb-2 font-medium">Date</th>
-                  <th className="pb-2 font-medium text-right">Price</th>
-                  <th className="pb-2 font-medium text-right">Change</th>
+      {/* Table */}
+      {loading ? (
+        <p className="text-sm text-gray-400 py-8 text-center">Loading…</p>
+      ) : null}
+      {!loading && rows.length === 0 ? (
+        <p className="text-sm text-gray-400 py-8 text-center">No history yet.</p>
+      ) : null}
+      {!loading && rows.length > 0 ? (
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-left text-xs text-gray-400 border-b border-gray-100">
+              <th className="pb-2 font-medium">Date</th>
+              <th className="pb-2 font-medium text-right">Price</th>
+              <th className="pb-2 font-medium text-right">Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, i) => {
+              const prev = rows[i + 1];
+              const diff = prev === undefined ? null : row.value - prev.value;
+              let diffEl: React.ReactNode = <span className="text-gray-300">—</span>;
+              if (diff !== null && diff !== 0) {
+                const sign = diff > 0 ? '+' : '';
+                diffEl = (
+                  <span className={diff > 0 ? 'text-red-500' : 'text-green-600'}>
+                    {sign}{isGas ? `${diff.toFixed(1)}¢` : `$${diff.toFixed(2)}`}
+                  </span>
+                );
+              } else if (diff === 0) {
+                diffEl = <span className="text-gray-300">0</span>;
+              }
+              return (
+                <tr key={row.timestamp} className="border-b border-gray-50 last:border-0">
+                  <td className="py-2 text-gray-500 text-xs">{formatTs(row.timestamp)}</td>
+                  <td className="py-2 text-right font-medium text-gray-800">{formatValue(row.value)}</td>
+                  <td className="py-2 text-right text-xs">{diffEl}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, i) => {
-                  const prev = rows[i + 1];
-                  const diff = prev === undefined ? null : row.value - prev.value;
-                  let diffEl: React.ReactNode = <span className="text-gray-300">—</span>;
-                  if (diff !== null && diff !== 0) {
-                    const sign = diff > 0 ? '+' : '';
-                    diffEl = (
-                      <span className={diff > 0 ? 'text-red-500' : 'text-green-600'}>
-                        {sign}{isGas ? `${diff.toFixed(1)}¢` : `$${diff.toFixed(2)}`}
-                      </span>
-                    );
-                  } else if (diff === 0) {
-                    diffEl = <span className="text-gray-300">0</span>;
-                  }
-                  return (
-                    <tr key={row.timestamp} className="border-b border-gray-50 last:border-0">
-                      <td className="py-2 text-gray-500 text-xs">{formatTs(row.timestamp)}</td>
-                      <td className="py-2 text-right font-medium text-gray-800">{formatValue(row.value)}</td>
-                      <td className="py-2 text-right text-xs">{diffEl}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          ) : null}
-        </div>
-      </dialog>
-    </>
+              );
+            })}
+          </tbody>
+        </table>
+      ) : null}
+    </Modal>
   );
 }
