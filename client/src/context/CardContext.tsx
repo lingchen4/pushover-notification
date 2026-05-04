@@ -95,9 +95,9 @@ export function CardProvider({ children }: { children: ReactNode }) {
   async function toggleNotifications(id: string): Promise<void> {
     const existing = state.cards.find((c) => c.id === id);
     if (!existing) return;
-    const config = existing.config as Record<string, unknown>;
+    const config = existing.config as unknown as Record<string, unknown>;
     const card = await cardService.update(id, {
-      config: { ...config, notificationsEnabled: !config['notificationsEnabled'] },
+      config: { ...config, notificationsEnabled: !config['notificationsEnabled'] } as unknown as typeof existing.config,
     });
     dispatch({ type: 'UPDATE_CARD', payload: card });
   }

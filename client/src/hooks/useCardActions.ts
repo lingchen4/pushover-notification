@@ -44,7 +44,7 @@ export function useCardActions(card: Card): UseCardActionsReturn {
 
   async function handleSave(formTitle: string, config: unknown, onSuccess: () => void) {
     try {
-      await updateCard(card.id, { title: formTitle.trim() || card.title, config: config as Record<string, unknown> });
+      await updateCard(card.id, { title: formTitle.trim() || card.title, config: config as never });
       onSuccess();
       toast.success('Card updated');
     } catch {
