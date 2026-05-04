@@ -38,6 +38,7 @@ export interface GasPriceLatestData {
   direction?: '+' | '-' | '=';
   forecastBlock?: string;
   fetchedAt: string;
+  sourceUrl?: string;
 }
 
 export interface AmazonPriceLatestData {
