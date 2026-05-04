@@ -100,7 +100,7 @@ export function TimerIntervalSelector({ value, scheduledTime, onChange }: TimerI
     <div className="space-y-2">
       <label className="block text-sm font-medium text-gray-700">Check Interval</label>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <span className="text-sm text-gray-500 shrink-0">Every</span>
         <input
           type="number"
@@ -115,7 +115,7 @@ export function TimerIntervalSelector({ value, scheduledTime, onChange }: TimerI
               key={u}
               type="button"
               onClick={() => handleUnit(u)}
-              className={`px-3 py-2 transition-colors ${
+              className={`px-2.5 py-2 transition-colors ${
                 unit === u ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'
               }`}
             >

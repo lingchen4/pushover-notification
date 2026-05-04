@@ -85,8 +85,8 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
         )}
 
         <div className="flex justify-end gap-3 pt-2">
-          <Button variant="secondary" onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit} disabled={saving}>
+          <Button variant="secondary" className="flex-1 sm:flex-none" onClick={handleClose}>Cancel</Button>
+          <Button className="flex-1 sm:flex-none" onClick={handleSubmit} disabled={saving}>
             {saving ? 'Adding…' : 'Add Card'}
           </Button>
         </div>

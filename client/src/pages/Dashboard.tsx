@@ -16,11 +16,11 @@ export function Dashboard() {
     <div className="min-h-screen bg-gray-50">
       <Header onAddCard={() => setAddOpen(true)} />
 
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+      <main className="mx-auto max-w-7xl px-3 py-6 sm:px-6 sm:py-8">
         {loading && (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((n) => (
-              <div key={n} className="h-48 animate-pulse rounded-xl bg-gray-200" />
+              <div key={n} className="min-w-0 h-48 animate-pulse rounded-xl bg-gray-200" />
             ))}
           </div>
         )}
@@ -45,10 +45,10 @@ export function Dashboard() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {cards.map((card) => {
               if (card.type === CardType.GAS_TRACKER) {
-                return <GasTrackerCard key={card.id} card={card} />;
+                return <div key={card.id} className="min-w-0"><GasTrackerCard card={card} /></div>;
               }
               if (card.type === CardType.AMAZON_PRICE) {
-                return <AmazonPriceCard key={card.id} card={card} />;
+                return <div key={card.id} className="min-w-0"><AmazonPriceCard card={card} /></div>;
               }
               return null;
             })}

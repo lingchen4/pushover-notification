@@ -98,12 +98,12 @@ export function PriceHistoryDialog({ open, onClose, cardId, cardTitle, cardType 
         className="fixed z-50 inset-0 m-auto bg-white rounded-xl shadow-2xl w-full max-w-lg flex flex-col max-h-[85vh] p-0 border-0"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <div>
-            <h2 className="text-base font-semibold text-gray-900">{cardTitle}</h2>
+        <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-b border-gray-100 gap-3">
+          <div className="min-w-0">
+            <h2 className="text-base font-semibold text-gray-900 truncate">{cardTitle}</h2>
             <p className="text-xs text-gray-400">Price history</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-3">
             <select
               value={limit}
               onChange={(e) => setLimit(Number(e.target.value))}
@@ -127,13 +127,13 @@ export function PriceHistoryDialog({ open, onClose, cardId, cardTitle, cardType 
 
         {/* Chart */}
         {rows.length > 1 && (
-          <div className="px-5 pt-4 pb-2">
+          <div className="px-4 sm:px-5 pt-4 pb-2">
             <Sparkline rows={rows} />
           </div>
         )}
 
         {/* Table */}
-        <div className="overflow-y-auto flex-1 px-5 pb-4">
+        <div className="overflow-y-auto flex-1 px-4 sm:px-5 pb-4">
           {loading ? (
             <p className="text-sm text-gray-400 py-8 text-center">Loading…</p>
           ) : null}

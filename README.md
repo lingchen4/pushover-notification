@@ -58,7 +58,7 @@ PUSHOVER_API_TOKEN=your_pushover_app_token
 npm run dev
 ```
 
-- Frontend: http://localhost:5173  
+- Frontend: http://localhost:5173
 - Backend API: http://localhost:3001
 
 ### Build

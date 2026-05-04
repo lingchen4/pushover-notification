@@ -1,8 +1,35 @@
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import db from '../db/database';
 import { logEvent } from '../utils/eventLogger';
+import { encrypt, decrypt } from '../utils/encryption';
 import { NotFoundError } from '../middleware/errorMiddleware';
-import type { Card, CardType, CardConfig, CreateCardDto, UpdateCardDto, LatestData } from '../types/card';
+import type { Card, CardType, CardConfig, CreateCardDto, UpdateCardDto, LatestData, PushoverConfig } from '../types/card';
+
+function encryptConfig(config: CardConfig): CardConfig {
+  const cfg = config as CardConfig & { pushoverConfig?: PushoverConfig };
+  if (!cfg.pushoverConfig) return config;
+  return {
+    ...config,
+    pushoverConfig: {
+      ...cfg.pushoverConfig,
+      userKey: encrypt(cfg.pushoverConfig.userKey),
+      apiToken: encrypt(cfg.pushoverConfig.apiToken),
+    },
+  };
+}
+
+function decryptConfig(config: CardConfig): CardConfig {
+  const cfg = config as CardConfig & { pushoverConfig?: PushoverConfig };
+  if (!cfg.pushoverConfig) return config;
+  return {
+    ...config,
+    pushoverConfig: {
+      ...cfg.pushoverConfig,
+      userKey: decrypt(cfg.pushoverConfig.userKey),
+      apiToken: decrypt(cfg.pushoverConfig.apiToken),
+    },
+  };
+}
 
 function rowToCard(row: Record<string, unknown>): Card {
   return {
@@ -10,7 +37,7 @@ function rowToCard(row: Record<string, unknown>): Card {
     type: row['type'] as CardType,
     title: row['title'] as string,
     enabled: row['enabled'] === 1,
-    config: JSON.parse(row['config'] as string) as CardConfig,
+    config: decryptConfig(JSON.parse(row['config'] as string) as CardConfig),
     latestData: row['latest_data'] ? JSON.parse(row['latest_data'] as string) as LatestData : undefined,
     createdAt: row['created_at'] as string,
     updatedAt: row['updated_at'] as string,
@@ -35,7 +62,7 @@ export function createCard(dto: CreateCardDto): Card {
   db.prepare(
     `INSERT INTO cards (id, type, title, enabled, config, created_at, updated_at)
      VALUES (?, ?, ?, 0, ?, ?, ?)`,
-  ).run(id, dto.type, dto.title, JSON.stringify(dto.config), now, now);
+  ).run(id, dto.type, dto.title, JSON.stringify(encryptConfig(dto.config)), now, now);
 
   logEvent({ level: 'info', event: 'card.created', cardId: id, cardType: dto.type, meta: { title: dto.title } });
 
@@ -51,7 +78,7 @@ export function updateCard(id: string, dto: UpdateCardDto): Card {
 
   db.prepare(
     `UPDATE cards SET title = ?, config = ?, updated_at = ? WHERE id = ?`,
-  ).run(newTitle, JSON.stringify(newConfig), now, id);
+  ).run(newTitle, JSON.stringify(encryptConfig(newConfig)), now, id);
 
   logEvent({ level: 'info', event: 'card.updated', cardId: id, cardType: existing.type });
 

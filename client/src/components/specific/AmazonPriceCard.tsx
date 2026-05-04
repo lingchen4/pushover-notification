@@ -128,11 +128,9 @@ export function AmazonPriceCard({ card }: AmazonPriceCardProps) {
           </div>
           <div className="space-y-0.5">
             {config.targetPrice != null && config.targetPrice > 0 && (
-              <p className="text-xs text-gray-400">Target: ${config.targetPrice.toFixed(2)} · {formatInterval(config.intervalMinutes, config.scheduledTime)}</p>
+              <p className="text-xs text-gray-400">Target: ${config.targetPrice.toFixed(2)}</p>
             )}
-            {(config.targetPrice == null || config.targetPrice === 0) && (
-              <p className="text-xs text-gray-400">{formatInterval(config.intervalMinutes, config.scheduledTime)}</p>
-            )}
+            <p className="text-xs text-gray-400">{formatInterval(config.intervalMinutes, config.scheduledTime)}</p>
             {data?.lastChangedAt && (
               <p className="text-xs text-gray-400">Price changed {formatDate(data.lastChangedAt)}</p>
             )}
@@ -155,13 +153,13 @@ export function AmazonPriceCard({ card }: AmazonPriceCardProps) {
             />
           </div>
           <AmazonPriceFields config={form} onChange={setForm} currentPrice={data?.price} />
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2 pt-2">
             <Button variant="ghost" onClick={sendTest} disabled={testingNotif}>
               {testingNotif ? 'Sending…' : 'Test Notification'}
             </Button>
             <div className="flex gap-3">
-              <Button variant="secondary" onClick={() => setEditOpen(false)}>Cancel</Button>
-              <Button onClick={handleSave}>Save</Button>
+              <Button variant="secondary" className="flex-1 sm:flex-none" onClick={() => setEditOpen(false)}>Cancel</Button>
+              <Button className="flex-1 sm:flex-none" onClick={handleSave}>Save</Button>
             </div>
           </div>
         </div>

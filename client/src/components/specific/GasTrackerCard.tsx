@@ -135,8 +135,9 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
           )}
           <div className="space-y-0.5">
             <p className="text-xs text-gray-400">
-              {config.priceThreshold != null ? `Alert ≤ ${formatPrice(config.priceThreshold)}` : 'Alert every check'} · {formatInterval(config.intervalMinutes, config.scheduledTime)}
+              {config.priceThreshold != null ? `Alert ≤ ${formatPrice(config.priceThreshold)}` : 'Alert every check'}
             </p>
+            <p className="text-xs text-gray-400">{formatInterval(config.intervalMinutes, config.scheduledTime)}</p>
             {data?.fetchedAt && (
               <p className="text-xs text-gray-400">Updated {formatDate(data.fetchedAt)}</p>
             )}
@@ -156,13 +157,13 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
             />
           </div>
           <GasTrackerFields config={form} onChange={setForm} />
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2 pt-2">
             <Button variant="ghost" onClick={sendTest} disabled={testingNotif}>
               {testingNotif ? 'Sending…' : 'Test Notification'}
             </Button>
             <div className="flex gap-3">
-              <Button variant="secondary" onClick={() => setEditOpen(false)}>Cancel</Button>
-              <Button onClick={handleSave}>Save</Button>
+              <Button variant="secondary" className="flex-1 sm:flex-none" onClick={() => setEditOpen(false)}>Cancel</Button>
+              <Button className="flex-1 sm:flex-none" onClick={handleSave}>Save</Button>
             </div>
           </div>
         </div>

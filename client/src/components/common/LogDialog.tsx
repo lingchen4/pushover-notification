@@ -71,9 +71,9 @@ export function LogDialog({ open, onClose }: LogDialogProps) {
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
       <div className="relative flex flex-col w-full max-w-2xl max-h-[80vh] rounded-xl bg-white shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h2 className="text-base font-semibold text-gray-900">Event Log</h2>
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-b border-gray-100 gap-3">
+          <h2 className="text-base font-semibold text-gray-900 truncate min-w-0">Event Log</h2>
+          <div className="flex shrink-0 items-center gap-3">
             <select
               value={limit}
               onChange={(e) => setLimit(Number(e.target.value))}
@@ -107,7 +107,7 @@ export function LogDialog({ open, onClose }: LogDialogProps) {
             const meta = parseMeta(log.meta);
             const cardName = log.cardId ? (cardMap[log.cardId] ?? log.cardId.slice(0, 8) + '…') : null;
             return (
-              <div key={log.id} className={`flex gap-3 px-5 py-3 border-b text-xs ${LEVEL_STYLES[log.level] ?? LEVEL_STYLES.info}`}>
+              <div key={log.id} className={`flex gap-3 px-4 sm:px-5 py-3 border-b text-xs ${LEVEL_STYLES[log.level] ?? LEVEL_STYLES.info}`}>
                 <div className="shrink-0 pt-0.5">
                   <span className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${LEVEL_BADGE[log.level] ?? LEVEL_BADGE.info}`}>
                     {log.level}

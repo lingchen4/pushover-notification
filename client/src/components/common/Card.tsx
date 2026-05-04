@@ -24,7 +24,7 @@ export function Card({
   children,
 }: CardShellProps) {
   return (
-    <article className="relative flex flex-col rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+    <article className="relative flex flex-col min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
       <button
         onClick={onDelete}
         aria-label="Delete card"
@@ -34,7 +34,7 @@ export function Card({
           <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
         </svg>
       </button>
-      <div className="flex items-center justify-between border-b border-gray-100 px-5 py-3 pr-8">
+      <div className="flex items-center justify-between border-b border-gray-100 px-4 sm:px-5 py-3 pr-8">
         <div className="flex items-center gap-2 min-w-0">
           <h2 className="truncate text-base font-semibold text-gray-900">{title}</h2>
           {notificationsEnabled !== undefined && (
@@ -56,8 +56,8 @@ export function Card({
           )}
         </div>
       </div>
-      <div className="flex-1 px-5 py-4 text-sm text-gray-700">{children}</div>
-      <div className="flex items-center justify-end gap-3 border-t border-gray-100 px-5 py-3">
+      <div className="flex-1 px-4 sm:px-5 py-4 text-sm text-gray-700">{children}</div>
+      <div className="flex items-center justify-end gap-3 border-t border-gray-100 px-4 sm:px-5 py-3">
         <Button variant="ghost" onClick={onEdit} aria-label="Edit card">
           Edit
         </Button>
