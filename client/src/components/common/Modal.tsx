@@ -23,7 +23,7 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
       onClick={onClose}
     >
       <div
-        className="flex flex-col w-full sm:max-w-lg max-h-[90dvh] sm:max-h-[85vh] rounded-t-2xl sm:rounded-xl bg-white shadow-xl"
+        className="flex flex-col w-full sm:max-w-xl lg:max-w-2xl max-h-[90dvh] sm:max-h-[85vh] rounded-t-2xl sm:rounded-xl bg-white shadow-xl"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
