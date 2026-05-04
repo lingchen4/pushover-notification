@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react';
+import { createContext, useReducer, useEffect, type ReactNode } from 'react';
 import { cardService } from '../services/cardService';
 import toast from 'react-hot-toast';
 import type { Card, CreateCardDto, UpdateCardDto } from '../types/card';
@@ -33,7 +33,7 @@ function cardReducer(state: CardState, action: CardAction): CardState {
   }
 }
 
-interface CardContextValue extends CardState {
+export interface CardContextValue extends CardState {
   addCard: (dto: CreateCardDto) => Promise<void>;
   updateCard: (id: string, dto: UpdateCardDto) => Promise<void>;
   refreshCard: (card: Card) => void;
@@ -42,7 +42,7 @@ interface CardContextValue extends CardState {
   toggleNotifications: (id: string) => Promise<void>;
 }
 
-const CardContext = createContext<CardContextValue | undefined>(undefined);
+export const CardContext = createContext<CardContextValue | undefined>(undefined);
 
 export function CardProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cardReducer, { cards: [], loading: true });
@@ -107,10 +107,4 @@ export function CardProvider({ children }: { children: ReactNode }) {
       {children}
     </CardContext.Provider>
   );
-}
-
-export function useCards(): CardContextValue {
-  const ctx = useContext(CardContext);
-  if (!ctx) throw new Error('useCards must be used within CardProvider');
-  return ctx;
 }

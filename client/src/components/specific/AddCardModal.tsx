@@ -3,7 +3,7 @@ import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
 import { GasTrackerFields } from './GasTrackerFields';
 import { AmazonPriceFields } from './AmazonPriceFields';
-import { useCards } from '../../context/CardContext';
+import { useCards } from '../../hooks/useCards';
 import { CardType, type CreateCardDto, type GasTrackerConfig, type AmazonPriceConfig } from '../../types/card';
 import { DEFAULT_GAS_CONFIG, DEFAULT_AMAZON_CONFIG, CARD_TYPE_OPTIONS } from '../../config/cardDefaults';
 import toast from 'react-hot-toast';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useCards } from '../context/CardContext';
+import { useCards } from '../hooks/useCards';
 import { Header } from '../components/layout/Header';
 import { AddCardModal } from '../components/specific/AddCardModal';
 import { GasTrackerCard } from '../components/specific/GasTrackerCard';

@@ -7,7 +7,7 @@ import { useTestNotification } from '../../hooks/useTestNotification';
 import { useCardActions } from '../../hooks/useCardActions';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { PriceHistoryDialog } from '../common/PriceHistoryDialog';
-import { useCards } from '../../context/CardContext';
+import { useCards } from '../../hooks/useCards';
 import { formatPrice, formatDate, formatInterval } from '../../utils/helpers';
 import type { Card as CardType, GasTrackerConfig, GasPriceLatestData } from '../../types/card';
 

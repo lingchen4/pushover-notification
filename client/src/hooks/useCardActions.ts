@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { cardService } from '../services/cardService';
-import { useCards } from '../context/CardContext';
+import { useCards } from './useCards';
 import type { Card } from '../types/card';
 import toast from 'react-hot-toast';
 
