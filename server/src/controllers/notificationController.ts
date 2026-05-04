@@ -68,6 +68,7 @@ export async function testCardNotification(req: Request, res: Response, next: Ne
         direction: latestData.direction ?? ('=' as const),
         forecastBlock: latestData.forecastBlock,
         fetchedAt: latestData.fetchedAt ?? new Date().toISOString(),
+        sourceUrl: latestData.sourceUrl ?? '',
       };
       notification = buildGasNotification(card.title, config, gasData);
     } else {
