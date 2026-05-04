@@ -1,5 +1,6 @@
 import { TimerIntervalSelector } from '../common/TimerIntervalSelector';
 import { NotificationSettings } from '../common/NotificationSettings';
+import { FormField } from '../common/FormField';
 import type { GasTrackerConfig } from '../../types/card';
 
 interface GasTrackerFieldsProps {
@@ -10,24 +11,18 @@ interface GasTrackerFieldsProps {
 export function GasTrackerFields({ config, onChange }: GasTrackerFieldsProps) {
   return (
     <>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Price Threshold (¢/L) <span className="text-gray-400 font-normal">— optional</span>
-        </label>
-        <input
-          type="number"
-          value={config.priceThreshold ?? ''}
-          onChange={(e) => {
-            const v = Number.parseFloat(e.target.value);
-            onChange({ ...config, priceThreshold: Number.isNaN(v) ? undefined : v });
-          }}
-          placeholder="e.g. 160 — leave blank to always alert"
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
-        />
-        <p className="mt-1 text-xs text-gray-400">
-          Only notify when price is at or below this value. Leave blank to notify on every check.
-        </p>
-      </div>
+      <FormField
+        id="price-threshold"
+        label={<>Price Threshold (¢/L) <span className="text-gray-400 font-normal">— optional</span></>}
+        type="number"
+        value={config.priceThreshold ?? ''}
+        onChange={(e) => {
+          const v = Number.parseFloat(e.target.value);
+          onChange({ ...config, priceThreshold: Number.isNaN(v) ? undefined : v });
+        }}
+        placeholder="e.g. 160 — leave blank to always alert"
+        helper="Only notify when price is at or below this value. Leave blank to notify on every check."
+      />
 
       <TimerIntervalSelector
         value={config.intervalMinutes}

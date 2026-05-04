@@ -7,6 +7,7 @@ interface CardShellProps {
   enabled: boolean;
   notificationsEnabled?: boolean;
   onToggle: () => void;
+  onNotificationsToggle?: () => void;
   onEdit: () => void;
   onDelete: () => void;
   toggling?: boolean;
@@ -18,11 +19,12 @@ export function Card({
   enabled,
   notificationsEnabled,
   onToggle,
+  onNotificationsToggle,
   onEdit,
   onDelete,
   toggling = false,
   children,
-}: CardShellProps) {
+}: Readonly<CardShellProps>) {
   return (
     <article className="relative flex flex-col h-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
       <button
@@ -38,21 +40,30 @@ export function Card({
         <div className="flex items-center gap-2 min-w-0">
           <h2 className="truncate text-base font-semibold text-gray-900">{title}</h2>
           {notificationsEnabled !== undefined && (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-label={notificationsEnabled ? 'Notifications on' : 'Notifications off'}
-              className={`shrink-0 h-4 w-4 ${notificationsEnabled ? 'text-indigo-500' : 'text-gray-300'}`}
+            <button
+              type="button"
+              onClick={onNotificationsToggle}
+              aria-label={notificationsEnabled ? 'Mute notifications' : 'Unmute notifications'}
+              title={notificationsEnabled ? 'Mute notifications' : 'Unmute notifications'}
+              className={`shrink-0 rounded p-0.5 transition-colors ${
+                onNotificationsToggle ? 'cursor-pointer hover:bg-gray-100' : 'cursor-default'
+              } ${notificationsEnabled ? 'text-indigo-500' : 'text-gray-300'}`}
             >
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-              {!notificationsEnabled && <line x1="1" y1="1" x2="23" y2="23" />}
-            </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-4 w-4"
+              >
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                {!notificationsEnabled && <line x1="1" y1="1" x2="23" y2="23" />}
+              </svg>
+            </button>
           )}
         </div>
       </div>

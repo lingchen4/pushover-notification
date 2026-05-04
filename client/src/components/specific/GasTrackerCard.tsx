@@ -1,28 +1,26 @@
 import { useState } from 'react';
 import { Card } from '../common/Card';
-import { Modal } from '../common/Modal';
-import { Button } from '../common/Button';
+import { CardEditModal } from '../common/CardEditModal';
+import { ExternalLinkAnchor } from '../common/ExternalLinkAnchor';
 import { GasTrackerFields } from './GasTrackerFields';
 import { useTestNotification } from '../../hooks/useTestNotification';
+import { useCardActions } from '../../hooks/useCardActions';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { PriceHistoryDialog } from '../common/PriceHistoryDialog';
 import { useCards } from '../../context/CardContext';
 import { formatPrice, formatDate, formatInterval } from '../../utils/helpers';
-import { cardService } from '../../services/cardService';
 import type { Card as CardType, GasTrackerConfig, GasPriceLatestData } from '../../types/card';
-import toast from 'react-hot-toast';
 
 interface GasTrackerCardProps {
   card: CardType;
 }
 
 export function GasTrackerCard({ card }: GasTrackerCardProps) {
-  const { toggleCard, updateCard, deleteCard, refreshCard } = useCards();
+  const { toggleNotifications } = useCards();
   const config = card.config as GasTrackerConfig;
   const data = card.latestData as GasPriceLatestData | undefined;
 
-  const [toggling, setToggling] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
+  const { toggling, refreshing, handleToggle, handleRefresh, handleSave, handleDelete } = useCardActions(card);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -30,49 +28,6 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
   const [formTitle, setFormTitle] = useState(card.title);
 
   const { sendTest, testing: testingNotif } = useTestNotification(card.id, form.pushoverConfig);
-
-  async function handleToggle() {
-    setToggling(true);
-    try {
-      await toggleCard(card.id);
-    } catch {
-      toast.error('Failed to toggle card');
-    } finally {
-      setToggling(false);
-    }
-  }
-
-  async function handleRefresh() {
-    setRefreshing(true);
-    try {
-      const updated = await cardService.fetch(card.id);
-      refreshCard(updated);
-      toast.success('Price refreshed');
-    } catch {
-      toast.error('Failed to fetch price');
-    } finally {
-      setRefreshing(false);
-    }
-  }
-
-  async function handleSave() {
-    try {
-      await updateCard(card.id, { title: formTitle.trim() || card.title, config: form });
-      setEditOpen(false);
-      toast.success('Card updated');
-    } catch {
-      toast.error('Failed to update card');
-    }
-  }
-
-  async function handleDelete() {
-    try {
-      await deleteCard(card.id);
-      toast.success('Card deleted');
-    } catch {
-      toast.error('Failed to delete card');
-    }
-  }
 
   const changeLabel = data?.change
     ? (data.change > 0 ? `+${data.change}¢` : `${data.change}¢`)
@@ -93,25 +48,16 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
         enabled={card.enabled}
         notificationsEnabled={config.notificationsEnabled}
         onToggle={handleToggle}
+        onNotificationsToggle={() => toggleNotifications(card.id)}
         onEdit={() => { setForm(config); setFormTitle(card.title); setEditOpen(true); }}
         onDelete={() => setDeleteOpen(true)}
         toggling={toggling}
       >
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <a
-              href={data?.sourceUrl ?? 'https://toronto.citynews.ca/toronto-gta-gas-prices/'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-indigo-500 transition-colors group"
-            >
+            <ExternalLinkAnchor href={data?.sourceUrl ?? 'https://toronto.citynews.ca/toronto-gta-gas-prices/'}>
               Toronto/GTA Average
-              <svg className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-            </a>
+            </ExternalLinkAnchor>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setHistoryOpen(true)}
@@ -157,29 +103,18 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
         </div>
       </Card>
 
-      <Modal open={editOpen} onClose={() => setEditOpen(false)} title={`Edit — ${card.title}`}>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Card Title</label>
-            <input
-              type="text"
-              value={formTitle}
-              onChange={(e) => setFormTitle(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
-            />
-          </div>
-          <GasTrackerFields config={form} onChange={setForm} />
-          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2 pt-2">
-            <Button variant="ghost" onClick={sendTest} disabled={testingNotif}>
-              {testingNotif ? 'Sending…' : 'Test Notification'}
-            </Button>
-            <div className="flex gap-3">
-              <Button variant="secondary" className="flex-1 sm:flex-none" onClick={() => setEditOpen(false)}>Cancel</Button>
-              <Button className="flex-1 sm:flex-none" onClick={handleSave}>Save</Button>
-            </div>
-          </div>
-        </div>
-      </Modal>
+      <CardEditModal
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        cardTitle={card.title}
+        formTitle={formTitle}
+        onFormTitleChange={setFormTitle}
+        onSave={() => handleSave(formTitle, form, () => setEditOpen(false))}
+        onTestNotification={sendTest}
+        testingNotif={testingNotif}
+      >
+        <GasTrackerFields config={form} onChange={setForm} />
+      </CardEditModal>
 
       <ConfirmDialog
         open={deleteOpen}

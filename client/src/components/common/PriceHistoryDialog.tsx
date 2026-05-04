@@ -47,7 +47,7 @@ function Sparkline({ rows, formatValue }: { readonly rows: PriceHistoryRow[]; re
         </div>
         {/* Chart + x-axis */}
         <div className="flex flex-col flex-1 min-w-0">
-          <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-16" preserveAspectRatio="none">
+          <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-16 sm:h-28" preserveAspectRatio="none">
             <defs>
               <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="rgb(99,102,241)" stopOpacity="0.18" />
@@ -112,7 +112,7 @@ export function PriceHistoryDialog({ open, onClose, cardId, cardTitle, cardType 
       <dialog
         open
         aria-label={`${cardTitle} price history`}
-        className="fixed z-50 inset-0 m-auto bg-white rounded-xl shadow-2xl w-full max-w-lg flex flex-col max-h-[85vh] p-0 border-0"
+        className="fixed z-50 inset-0 m-auto bg-white rounded-xl shadow-2xl w-full max-w-lg lg:max-w-2xl flex flex-col max-h-[85vh] p-0 border-0"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-b border-gray-100 gap-3">

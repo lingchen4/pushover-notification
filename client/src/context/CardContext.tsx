@@ -39,6 +39,7 @@ interface CardContextValue extends CardState {
   refreshCard: (card: Card) => void;
   deleteCard: (id: string) => Promise<void>;
   toggleCard: (id: string) => Promise<void>;
+  toggleNotifications: (id: string) => Promise<void>;
 }
 
 const CardContext = createContext<CardContextValue | undefined>(undefined);
@@ -91,8 +92,18 @@ export function CardProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  async function toggleNotifications(id: string): Promise<void> {
+    const existing = state.cards.find((c) => c.id === id);
+    if (!existing) return;
+    const config = existing.config as Record<string, unknown>;
+    const card = await cardService.update(id, {
+      config: { ...config, notificationsEnabled: !config['notificationsEnabled'] },
+    });
+    dispatch({ type: 'UPDATE_CARD', payload: card });
+  }
+
   return (
-    <CardContext.Provider value={{ ...state, addCard, updateCard, refreshCard, deleteCard, toggleCard }}>
+    <CardContext.Provider value={{ ...state, addCard, updateCard, refreshCard, deleteCard, toggleCard, toggleNotifications }}>
       {children}
     </CardContext.Provider>
   );

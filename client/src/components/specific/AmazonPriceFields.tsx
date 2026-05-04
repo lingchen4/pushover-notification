@@ -1,5 +1,7 @@
 import { TimerIntervalSelector } from '../common/TimerIntervalSelector';
 import { NotificationSettings } from '../common/NotificationSettings';
+import { FormField } from '../common/FormField';
+import { Input } from '../common/Input';
 import type { AmazonPriceConfig } from '../../types/card';
 
 interface AmazonPriceFieldsProps {
@@ -11,16 +13,14 @@ interface AmazonPriceFieldsProps {
 export function AmazonPriceFields({ config, onChange, currentPrice }: AmazonPriceFieldsProps) {
   return (
     <>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Product URL</label>
-        <input
-          type="url"
-          value={config.productUrl}
-          onChange={(e) => onChange({ ...config, productUrl: e.target.value })}
-          placeholder="https://www.amazon.ca/dp/..."
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
-        />
-      </div>
+      <FormField
+        id="product-url"
+        label="Product URL"
+        type="url"
+        value={config.productUrl}
+        onChange={(e) => onChange({ ...config, productUrl: e.target.value })}
+        placeholder="https://www.amazon.ca/dp/..."
+      />
 
       <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 space-y-3">
         <div className="flex items-center justify-between">
@@ -34,7 +34,8 @@ export function AmazonPriceFields({ config, onChange, currentPrice }: AmazonPric
 
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-500 shrink-0">$</span>
-          <input
+          <Input
+            className="flex-1"
             type="number"
             step="0.01"
             min="0"
@@ -44,7 +45,6 @@ export function AmazonPriceFields({ config, onChange, currentPrice }: AmazonPric
               onChange({ ...config, targetPrice: Number.isNaN(v) ? undefined : v });
             }}
             placeholder="e.g. 39.99"
-            className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
           />
           {config.targetPrice != null && config.targetPrice > 0 && currentPrice != null && (
             <span className={`shrink-0 text-xs font-medium ${config.targetPrice <= currentPrice ? 'text-green-600' : 'text-orange-500'}`}>
