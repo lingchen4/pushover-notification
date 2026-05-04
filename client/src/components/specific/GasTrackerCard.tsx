@@ -74,16 +74,12 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
     }
   }
 
-  const changeLabel = data?.change !== undefined
-    ? (data.change > 0
-        ? `+${data.change}¢ today`
-        : data.change < 0
-          ? `${data.change}¢ today`
-          : 'No change today')
+  const changeLabel = data?.change
+    ? (data.change > 0 ? `+${data.change}¢` : `${data.change}¢`)
     : null;
 
-  const changeColor = data?.change !== undefined
-    ? (data.change > 0 ? 'text-red-500' : data.change < 0 ? 'text-green-600' : 'text-gray-400')
+  const changeColor = data?.change
+    ? (data.change > 0 ? 'text-red-500' : 'text-green-600')
     : '';
 
   return (
