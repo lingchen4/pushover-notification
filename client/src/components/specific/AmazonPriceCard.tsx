@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card } from './Card';
+import { Card } from '../common/Card';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
 import { AmazonPriceFields } from './AmazonPriceFields';
