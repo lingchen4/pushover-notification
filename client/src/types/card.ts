@@ -33,6 +33,10 @@ export type CardConfig = GasTrackerConfig | AmazonPriceConfig;
 export interface GasPriceLatestData {
   price?: number;
   change?: number;
+  latestDate?: string;
+  headlineChange?: string;
+  direction?: '+' | '-' | '=';
+  forecastBlock?: string;
   fetchedAt: string;
 }
 
