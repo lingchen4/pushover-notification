@@ -41,6 +41,9 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
     ? (data.change > 0 ? 'text-red-500' : 'text-green-600')
     : '';
 
+  const upcomingColor = data?.direction === '+' ? 'text-red-500' : data?.direction === '-' ? 'text-green-600' : 'text-gray-500';
+  const upcomingIcon = data?.direction === '+' ? '↑' : data?.direction === '-' ? '↓' : '→';
+
   return (
     <div className="w-full">
       <Card
@@ -89,6 +92,12 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
             <p className={`text-sm font-medium ${changeColor}`}>
               {changeDateLabel && <span className="text-gray-500 font-normal">Change on {changeDateLabel}: </span>}
               {changeLabel}
+            </p>
+          )}
+          {data?.headlineChange && (
+            <p className={`text-sm font-medium ${upcomingColor}`}>
+              <span className="text-gray-500 font-normal">Upcoming: </span>
+              {upcomingIcon} {data.headlineChange}
             </p>
           )}
           <div className="space-y-0.5">
