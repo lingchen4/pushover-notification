@@ -84,10 +84,13 @@ export function AmazonPriceCard({ card }: AmazonPriceCardProps) {
               </p>
             )}
           </div>
+          {config.targetPrice != null && config.targetPrice > 0 && (
+            <p className="text-xs font-medium text-gray-700">
+              <span className="text-gray-500 font-normal">Target: </span>
+              ${config.targetPrice.toFixed(2)}
+            </p>
+          )}
           <div className="space-y-0.5">
-            {config.targetPrice != null && config.targetPrice > 0 && (
-              <p className="text-xs text-gray-400">Target: ${config.targetPrice.toFixed(2)}</p>
-            )}
             <p className="text-xs text-gray-400">{formatInterval(config.intervalMinutes, config.scheduledTime)}</p>
             {data?.lastChangedAt && (
               <p className="text-xs text-gray-400">Price changed {formatDate(data.lastChangedAt)}</p>
