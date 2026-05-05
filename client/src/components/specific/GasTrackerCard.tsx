@@ -94,20 +94,21 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
 
           {/* Stats pills */}
           {(changeLabel || data?.headlineChange) && (
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               {changeLabel && (
-                <div className="flex-1 rounded-lg bg-gray-50 px-3 py-2">
-                  <p className="text-[10px] uppercase tracking-wide text-gray-400 mb-0.5">
-                    {changeDateLabel ?? 'Last change'}
-                  </p>
-                  <p className={`text-sm font-semibold ${changeColor}`}>{changeLabel}</p>
-                </div>
+                <p className={`text-sm font-medium ${changeColor}`}>
+                  {changeDateLabel && <span className="text-gray-500 font-normal">Change on {changeDateLabel}: </span>}
+                  {changeLabel}
+                </p>
+              )}
+              {changeLabel && data?.headlineChange && (
+                <span className="text-gray-300">·</span>
               )}
               {data?.headlineChange && (
-                <div className="flex-1 rounded-lg bg-gray-50 px-3 py-2">
-                  <p className="text-[10px] uppercase tracking-wide text-gray-400 mb-0.5">Upcoming</p>
-                  <p className={`text-sm font-semibold ${upcomingColor}`}>{upcomingIcon} {data.headlineChange}</p>
-                </div>
+                <p className={`text-sm font-medium ${upcomingColor}`}>
+                  <span className="text-gray-500 font-normal">Upcoming: </span>
+                  {upcomingIcon} {data.headlineChange}
+                </p>
               )}
             </div>
           )}
