@@ -56,7 +56,8 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
         onDelete={() => setDeleteOpen(true)}
         toggling={toggling}
       >
-        <div className="space-y-2">
+        <div className="space-y-3">
+          {/* Source link + actions */}
           <div className="flex items-center justify-between">
             <ExternalLinkAnchor href={data?.sourceUrl ?? 'https://toronto.citynews.ca/toronto-gta-gas-prices/'}>
               Toronto/GTA Average
@@ -80,25 +81,38 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
               </button>
             </div>
           </div>
-          <div className="flex items-end gap-3">
-            <p className="text-3xl font-bold text-gray-900">
+
+          {/* Price */}
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-4xl font-bold text-gray-900">
               {data?.price !== undefined ? `${data.price}¢` : '—'}
-            </p>
+            </span>
             {data?.price !== undefined && (
-              <p className="text-sm text-gray-500 mb-1">per litre</p>
-            )}
-            {data?.headlineChange && (
-              <p className={`text-sm font-medium mb-1 ${upcomingColor}`}>
-                <span className="text-gray-400 font-normal">Upcoming: </span>{upcomingIcon} {data.headlineChange}
-              </p>
+              <span className="text-sm text-gray-400">/ L</span>
             )}
           </div>
-          {changeLabel && (
-            <p className={`text-sm font-medium ${changeColor}`}>
-              {changeDateLabel && <span className="text-gray-500 font-normal">Change on {changeDateLabel}: </span>}
-              {changeLabel}
-            </p>
+
+          {/* Stats pills */}
+          {(changeLabel || data?.headlineChange) && (
+            <div className="flex gap-2">
+              {changeLabel && (
+                <div className="flex-1 rounded-lg bg-gray-50 px-3 py-2">
+                  <p className="text-[10px] uppercase tracking-wide text-gray-400 mb-0.5">
+                    {changeDateLabel ?? 'Last change'}
+                  </p>
+                  <p className={`text-sm font-semibold ${changeColor}`}>{changeLabel}</p>
+                </div>
+              )}
+              {data?.headlineChange && (
+                <div className="flex-1 rounded-lg bg-gray-50 px-3 py-2">
+                  <p className="text-[10px] uppercase tracking-wide text-gray-400 mb-0.5">Upcoming</p>
+                  <p className={`text-sm font-semibold ${upcomingColor}`}>{upcomingIcon} {data.headlineChange}</p>
+                </div>
+              )}
+            </div>
           )}
+
+          {/* Footer meta */}
           <div className="space-y-0.5">
             <p className="text-xs text-gray-400">
               {config.priceThreshold != null ? `Alert ≤ ${formatPrice(config.priceThreshold)}` : 'Alert every check'}
