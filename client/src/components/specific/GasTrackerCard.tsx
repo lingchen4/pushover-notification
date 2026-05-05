@@ -87,17 +87,16 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
             {data?.price !== undefined && (
               <p className="text-sm text-gray-500 mb-1">per litre</p>
             )}
+            {data?.headlineChange && (
+              <p className={`text-sm font-medium mb-1 ${upcomingColor}`}>
+                {upcomingIcon} {data.headlineChange}
+              </p>
+            )}
           </div>
           {changeLabel && (
             <p className={`text-sm font-medium ${changeColor}`}>
               {changeDateLabel && <span className="text-gray-500 font-normal">Change on {changeDateLabel}: </span>}
               {changeLabel}
-            </p>
-          )}
-          {data?.headlineChange && (
-            <p className={`text-sm font-medium ${upcomingColor}`}>
-              <span className="text-gray-500 font-normal">Upcoming: </span>
-              {upcomingIcon} {data.headlineChange}
             </p>
           )}
           <div className="space-y-0.5">
