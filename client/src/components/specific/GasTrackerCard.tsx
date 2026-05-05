@@ -83,26 +83,33 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
           </div>
 
           {/* Price */}
-          <div className="flex items-baseline gap-2 flex-wrap">
+          <div className="flex items-baseline gap-1.5">
             <span className="text-4xl font-bold text-gray-900">
               {data?.price !== undefined ? `${data.price}¢` : '—'}
             </span>
             {data?.price !== undefined && (
               <span className="text-sm text-gray-400">/ L</span>
             )}
-            {data?.headlineChange && (
-              <span className={`text-sm font-medium ${upcomingColor}`}>
-                {upcomingIcon} {data.headlineChange} <span className="text-gray-400 font-normal">upcoming</span>
-              </span>
-            )}
           </div>
 
-          {/* Last change */}
-          {changeLabel && (
-            <p className={`text-sm font-medium ${changeColor}`}>
-              {changeDateLabel && <span className="text-gray-500 font-normal">Change on {changeDateLabel}: </span>}
-              {changeLabel}
-            </p>
+          {/* Change + upcoming on one line */}
+          {(changeLabel || data?.headlineChange) && (
+            <div className="flex items-center gap-1.5 text-sm flex-wrap">
+              {changeLabel && (
+                <span className={`font-medium ${changeColor}`}>
+                  {changeLabel}
+                  {changeDateLabel && <span className="text-gray-400 font-normal"> on {changeDateLabel}</span>}
+                </span>
+              )}
+              {changeLabel && data?.headlineChange && (
+                <span className="text-gray-300">·</span>
+              )}
+              {data?.headlineChange && (
+                <span className={`font-medium ${upcomingColor}`}>
+                  {upcomingIcon} {data.headlineChange}
+                </span>
+              )}
+            </div>
           )}
 
           {/* Footer meta */}
