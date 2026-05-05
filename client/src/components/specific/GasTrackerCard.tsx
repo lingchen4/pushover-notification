@@ -83,34 +83,27 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
           </div>
 
           {/* Price */}
-          <div className="flex items-baseline gap-1.5">
+          <div className="flex items-baseline gap-2 flex-wrap">
             <span className="text-4xl font-bold text-gray-900">
               {data?.price !== undefined ? `${data.price}¢` : '—'}
             </span>
             {data?.price !== undefined && (
               <span className="text-sm text-gray-400">/ L</span>
             )}
+            {data?.headlineChange && (
+              <span className={`text-sm font-medium ${upcomingColor}`}>
+                <span className="text-gray-400 font-normal">Upcoming: </span>
+                {upcomingIcon} {data.headlineChange}
+              </span>
+            )}
           </div>
 
-          {/* Stats pills */}
-          {(changeLabel || data?.headlineChange) && (
-            <div className="flex items-center gap-2 flex-wrap">
-              {changeLabel && (
-                <p className={`text-sm font-medium ${changeColor}`}>
-                  {changeDateLabel && <span className="text-gray-500 font-normal">Change on {changeDateLabel}: </span>}
-                  {changeLabel}
-                </p>
-              )}
-              {changeLabel && data?.headlineChange && (
-                <span className="text-gray-300">·</span>
-              )}
-              {data?.headlineChange && (
-                <p className={`text-sm font-medium ${upcomingColor}`}>
-                  <span className="text-gray-500 font-normal">Upcoming: </span>
-                  {upcomingIcon} {data.headlineChange}
-                </p>
-              )}
-            </div>
+          {/* Last change */}
+          {changeLabel && (
+            <p className={`text-sm font-medium ${changeColor}`}>
+              {changeDateLabel && <span className="text-gray-500 font-normal">Change on {changeDateLabel}: </span>}
+              {changeLabel}
+            </p>
           )}
 
           {/* Footer meta */}
