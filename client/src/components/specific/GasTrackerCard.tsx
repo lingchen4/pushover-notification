@@ -81,6 +81,7 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
               </button>
             </div>
           </div>
+          <p className="text-xs text-gray-600">Regular Unleaded</p>
 
           {/* Price */}
           <div className="flex items-end gap-3">
