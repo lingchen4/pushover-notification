@@ -89,7 +89,7 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
             )}
             {data?.headlineChange && (
               <p className={`text-sm font-medium mb-1 ${upcomingColor}`}>
-                {upcomingIcon} {data.headlineChange}
+                <span className="text-gray-400 font-normal">Upcoming: </span>{upcomingIcon} {data.headlineChange}
               </p>
             )}
           </div>
