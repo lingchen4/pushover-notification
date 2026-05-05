@@ -56,7 +56,7 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
         onDelete={() => setDeleteOpen(true)}
         toggling={toggling}
       >
-        <div className="space-y-3">
+        <div className="space-y-2">
           {/* Source link + actions */}
           <div className="flex items-center justify-between">
             <ExternalLinkAnchor href={data?.sourceUrl ?? 'https://toronto.citynews.ca/toronto-gta-gas-prices/'}>
@@ -81,14 +81,12 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
               </button>
             </div>
           </div>
-          <p className="text-xs text-gray-600">Regular Unleaded</p>
+          <p className="text-xs text-gray-600 -mt-1">Regular Unleaded</p>
 
           {/* Price */}
-          <div className="flex items-end gap-3">
-            <p className="text-2xl font-bold text-gray-900">
-              {data?.price !== undefined ? `${data.price}¢` : '—'}
-            </p>
-          </div>
+          <p className="text-2xl font-bold text-gray-900">
+            {data?.price !== undefined ? `${data.price}¢` : '—'}
+          </p>
 
           {/* Last change */}
           {changeLabel && (
