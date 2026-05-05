@@ -88,11 +88,6 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
             <p className="text-2xl font-bold text-gray-900">
               {data?.price !== undefined ? `${data.price}¢` : '—'}
             </p>
-            {data?.headlineChange && (
-              <p className={`text-xs font-medium mb-0.5 ${upcomingColor}`}>
-                {upcomingIcon} {data.headlineChange} <span className="text-gray-400 font-normal">tomorrow</span>
-              </p>
-            )}
           </div>
 
           {/* Last change */}
@@ -100,6 +95,13 @@ export function GasTrackerCard({ card }: GasTrackerCardProps) {
             <p className={`text-sm font-medium ${changeColor}`}>
               {changeDateLabel && <span className="text-gray-500 font-normal">on {changeDateLabel}: </span>}
               {changeLabel}
+            </p>
+          )}
+
+          {/* Upcoming */}
+          {data?.headlineChange && (
+            <p className={`text-xs font-medium ${upcomingColor}`}>
+              {upcomingIcon} {data.headlineChange} <span className="text-gray-400 font-normal">tomorrow</span>
             </p>
           )}
 
